@@ -59,27 +59,145 @@ public class Synthesizer {
         return Data(bytes: wavPointer!, count: Int(wavLength))
     }
 
+    public func getOnnxruntime() -> Onnxruntime? {
+        guard let onnxruntimePointer = voicevox_synthesizer_get_onnxruntime(self.pointer) else {
+            return nil
+        }
+        return Onnxruntime(pointer: onnxruntimePointer)
+    }
+
+    public func isGpuMode() -> Bool {
+        return voicevox_synthesizer_is_gpu_mode(self.pointer)
+    }
+
+    public func isLoadedVoiceModel(modelId: VoiceModelId) -> Bool {
+        var mutableModelId = modelId
+        return voicevox_synthesizer_is_loaded_voice_model(self.pointer, &mutableModelId.bytes)
+    }
+
+    public func createMetasJson() throws -> String {
+        guard let jsonPointer = voicevox_synthesizer_create_metas_json(self.pointer) else {
+            throw ResultCodeError.from(.INVALID_MODEL_DATA_ERROR)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer)
+    }
+
+    public func createAudioQueryFromKana(kana: String, styleId: UInt32) throws -> String {
+        var jsonPointer: UnsafeMutablePointer<CChar>?
+        let result = voicevox_synthesizer_create_audio_query_from_kana(
+            self.pointer, kana, styleId, &jsonPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer!)
+    }
+
+    public func createAudioQuery(text: String, styleId: UInt32) throws -> String {
+        var jsonPointer: UnsafeMutablePointer<CChar>?
+        let result = voicevox_synthesizer_create_audio_query(
+            self.pointer, text, styleId, &jsonPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer!)
+    }
+
+    public func createAccentPhrasesFromKana(kana: String, styleId: UInt32) throws -> String {
+        var jsonPointer: UnsafeMutablePointer<CChar>?
+        let result = voicevox_synthesizer_create_accent_phrases_from_kana(
+            self.pointer, kana, styleId, &jsonPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer!)
+    }
+
+    public func createAccentPhrases(text: String, styleId: UInt32) throws -> String {
+        var jsonPointer: UnsafeMutablePointer<CChar>?
+        let result = voicevox_synthesizer_create_accent_phrases(
+            self.pointer, text, styleId, &jsonPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer!)
+    }
+
+    public func replaceMoraData(accentPhrasesJson: String, styleId: UInt32) throws -> String {
+        var jsonPointer: UnsafeMutablePointer<CChar>?
+        let result = voicevox_synthesizer_replace_mora_data(
+            self.pointer, accentPhrasesJson, styleId, &jsonPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer!)
+    }
+
+    public func replacePhonemeLength(accentPhrasesJson: String, styleId: UInt32) throws -> String {
+        var jsonPointer: UnsafeMutablePointer<CChar>?
+        let result = voicevox_synthesizer_replace_phoneme_length(
+            self.pointer, accentPhrasesJson, styleId, &jsonPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer!)
+    }
+
+    public func replaceMoraPitch(accentPhrasesJson: String, styleId: UInt32) throws -> String {
+        var jsonPointer: UnsafeMutablePointer<CChar>?
+        let result = voicevox_synthesizer_replace_mora_pitch(
+            self.pointer, accentPhrasesJson, styleId, &jsonPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer!)
+    }
+
+    public func synthesis(audioQueryJson: String, styleId: UInt32, options: SynthesisOptions) throws
+        -> Data
+    {
+        var wavPointer: UnsafeMutablePointer<UInt8>?
+        var wavLength: UInt = 0
+        let result = voicevox_synthesizer_synthesis(
+            self.pointer, audioQueryJson, styleId, options.options, &wavLength, &wavPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer {
+            if let wavPointer = wavPointer {
+                voicevox_wav_free(wavPointer)
+            }
+        }
+        return Data(bytes: wavPointer!, count: Int(wavLength))
+    }
+
+    public func ttsFromKana(kana: String, styleId: UInt32, options: TtsOptions) throws -> Data {
+        var wavPointer: UnsafeMutablePointer<UInt8>?
+        var wavLength: UInt = 0
+        let result = voicevox_synthesizer_tts_from_kana(
+            self.pointer, kana, styleId, options.options, &wavLength, &wavPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer {
+            if let wavPointer = wavPointer {
+                voicevox_wav_free(wavPointer)
+            }
+        }
+        return Data(bytes: wavPointer!, count: Int(wavLength))
+    }
+
     deinit {
         if pointer != nil {
             voicevox_synthesizer_delete(pointer)
             pointer = nil
         }
     }
-
-    // TODO: Impl
-    // voicevox_synthesizer_get_onnxruntime
-    // voicevox_synthesizer_is_gpu_mode
-    // voicevox_synthesizer_is_loaded_voice_model
-    // voicevox_synthesizer_create_metas_json
-    // voicevox_onnxruntime_create_supported_devices_json
-    // voicevox_synthesizer_create_audio_query_from_kana
-    // voicevox_synthesizer_create_audio_query
-    // voicevox_synthesizer_create_accent_phrases_from_kana
-    // voicevox_synthesizer_create_accent_phrases
-    // voicevox_synthesizer_replace_mora_data
-    // voicevox_synthesizer_replace_phoneme_length
-    // voicevox_synthesizer_replace_mora_pitch
-    // voicevox_synthesizer_synthesis
-    // voicevox_synthesizer_tts_from_kana
-
 }
