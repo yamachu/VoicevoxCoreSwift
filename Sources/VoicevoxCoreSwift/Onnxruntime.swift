@@ -9,7 +9,8 @@ import Foundation
 public class Onnxruntime {
     internal fileprivate(set) var pointer: OpaquePointer?
 
-    fileprivate init(pointer: OpaquePointer?) {
+    // NOTE: Synthesizerからも呼ばれるためinternalにしている
+    internal init(pointer: OpaquePointer?) {
         self.pointer = pointer
     }
 
