@@ -21,6 +21,18 @@ public class Onnxruntime {
         }
         return Onnxruntime(pointer: pointer)
     }
+
+    public func createSupportedDevicesJson() throws -> String {
+        var outputJson: UnsafeMutablePointer<CChar>?
+        let result = voicevox_onnxruntime_create_supported_devices_json(pointer, &outputJson)
+        guard result == VOICEVOX_RESULT_OK.rawValue else {
+            throw ResultCodeError.from(.init(rawValue: result)!)
+        }
+        defer {
+            voicevox_json_free(outputJson)
+        }
+        return String(cString: outputJson!)
+    }
 }
 
 #if os(macOS)

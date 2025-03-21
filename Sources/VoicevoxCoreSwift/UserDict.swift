@@ -87,6 +87,13 @@ public class UserDict {
         }
     }
 
+    public func importUserDict(otherDict: UserDict) throws {
+        let result = voicevox_user_dict_import(self.pointer, otherDict.pointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+    }
+
     deinit {
         if pointer != nil {
             voicevox_user_dict_delete(pointer)
