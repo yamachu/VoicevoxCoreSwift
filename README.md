@@ -16,7 +16,12 @@ binaryTargetに依存していないため、ヘッダに変更がない限り�
 
 ## Features
 
-WIP
+- 0.16.0-preview.1で提供されるAPIをラップ
+
+### Future work
+
+- AccentPhrasesなどのjson形式で渡されるものを型で表現する
+  - ref: https://github.com/VOICEVOX/voicevox_core/issues/975
 
 ## License
 
