@@ -22,8 +22,24 @@ public class OpenJtalkRc {
         return OpenJtalkRc(pointer: pointer)
     }
 
-    // TODO: useUserDict
-    // TODO: analyze
+    public func useUserDict(userDict: UserDict) throws {
+        let result = voicevox_open_jtalk_rc_use_user_dict(self.pointer, userDict.pointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+    }
+
+    public func analyze(text: String) throws -> String {
+        var outputJson: UnsafeMutablePointer<CChar>?
+        let result = voicevox_open_jtalk_rc_analyze(self.pointer, text, &outputJson)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer {
+            voicevox_json_free(outputJson)
+        }
+        return String(cString: outputJson!)
+    }
 
     deinit {
         if pointer != nil {
