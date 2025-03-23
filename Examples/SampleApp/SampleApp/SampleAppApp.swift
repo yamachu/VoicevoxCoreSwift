@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SampleAppCore
 
 @main
 struct SampleAppApp: App {
