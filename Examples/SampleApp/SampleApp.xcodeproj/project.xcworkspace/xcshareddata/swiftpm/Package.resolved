@@ -1,0 +1,33 @@
+{
+  "originHash" : "e5d14eb9d9e25aa2e3120fafc1c8a48e58d6fb931e929c74236dea11cf2a1a04",
+  "pins" : [
+    {
+      "identity" : "datacompression",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mw99/DataCompression.git",
+      "state" : {
+        "revision" : "5ab15951321b08b74511601cbd0497667649d70b",
+        "version" : "3.8.0"
+      }
+    },
+    {
+      "identity" : "tarscape",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kayembi/Tarscape.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ce026160f8f009275afd1cc8175a199aa3ec0072"
+      }
+    },
+    {
+      "identity" : "voicevoxcoreswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yamachu/VoicevoxCoreSwift.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "1350769b451b691fef0215074c0067bec32c1348"
+      }
+    }
+  ],
+  "version" : 3
+}
