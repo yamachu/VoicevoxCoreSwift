@@ -14,9 +14,17 @@ binaryTargetに依存していないため、ヘッダに変更がない限り�
 - iOS
 - macOS
 
+## Installation
+
+### Swift Package Manager
+
+```swift
+.package(url: "https://github.com/yamachu/VoicevoxCoreSwift.git", branch: "main") // or use a specific version
+```
+
 ## Features
 
-- 0.16.0-preview.1で提供されるAPIをラップ
+- [voicevox_core 0.16.0](https://github.com/VOICEVOX/voicevox_core/releases/tag/0.16.0) で提供されるAPIをラップ
 
 ### Future work
 
