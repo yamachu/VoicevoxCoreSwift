@@ -27,6 +27,15 @@
         "branch" : "main",
         "revision" : "1350769b451b691fef0215074c0067bec32c1348"
       }
+    },
+    {
+      "identity" : "voicevoxcoreswiftpm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yamachu/VoicevoxCoreSwiftPM.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "bc5e1b79ab46f7c70928466141fbbd45f65ade3f"
+      }
     }
   ],
   "version" : 3
