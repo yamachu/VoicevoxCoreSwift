@@ -12,6 +12,9 @@
 		03D3DD3E2D8F999700B585A5 /* voicevox_core.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03D3DD3B2D8F999700B585A5 /* voicevox_core.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		03D3DD3F2D8F999700B585A5 /* voicevox_onnxruntime.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03D3DD3C2D8F999700B585A5 /* voicevox_onnxruntime.xcframework */; };
 		03D3DD402D8F999700B585A5 /* voicevox_onnxruntime.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03D3DD3C2D8F999700B585A5 /* voicevox_onnxruntime.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		19A5E5BA2E0D84EE00F46BDE /* Tarscape in Frameworks */ = {isa = PBXBuildFile; productRef = 19A5E5B92E0D84EE00F46BDE /* Tarscape */; };
+		19A5E5BD2E0D84F500F46BDE /* DataCompression in Frameworks */ = {isa = PBXBuildFile; productRef = 19A5E5BC2E0D84F500F46BDE /* DataCompression */; };
+		19A5E5DE2E0EC52B00F46BDE /* VoicevoxCoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 19A5E5DD2E0EC52B00F46BDE /* VoicevoxCoreSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,9 +38,22 @@
 		03D3DD3C2D8F999700B585A5 /* voicevox_onnxruntime.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = voicevox_onnxruntime.xcframework; path = ../native/voicevox_onnxruntime.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		19A5E5DF2E0EC55C00F46BDE /* Exceptions for "SampleApp" folder in "SampleApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Config.xcconfig,
+			);
+			target = 03D3DCF22D8EE6A400B585A5 /* SampleApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		03D3DCF52D8EE6A400B585A5 /* SampleApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				19A5E5DF2E0EC55C00F46BDE /* Exceptions for "SampleApp" folder in "SampleApp" target */,
+			);
 			path = SampleApp;
 			sourceTree = "<group>";
 		};
@@ -49,8 +65,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				03D3DD392D8EE96500B585A5 /* SampleAppCore in Frameworks */,
+				19A5E5BD2E0D84F500F46BDE /* DataCompression in Frameworks */,
 				03D3DD3D2D8F999700B585A5 /* voicevox_core.xcframework in Frameworks */,
 				03D3DD3F2D8F999700B585A5 /* voicevox_onnxruntime.xcframework in Frameworks */,
+				19A5E5DE2E0EC52B00F46BDE /* VoicevoxCoreSwift in Frameworks */,
+				19A5E5BA2E0D84EE00F46BDE /* Tarscape in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +124,9 @@
 			name = SampleApp;
 			packageProductDependencies = (
 				03D3DD382D8EE96500B585A5 /* SampleAppCore */,
+				19A5E5B92E0D84EE00F46BDE /* Tarscape */,
+				19A5E5BC2E0D84F500F46BDE /* DataCompression */,
+				19A5E5DD2E0EC52B00F46BDE /* VoicevoxCoreSwift */,
 			);
 			productName = SampleApp;
 			productReference = 03D3DCF32D8EE6A400B585A5 /* SampleApp.app */;
@@ -118,7 +140,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					03D3DCF22D8EE6A400B585A5 = {
 						CreatedOnToolsVersion = 16.2;
@@ -136,6 +158,9 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				03D3DD372D8EE96500B585A5 /* XCLocalSwiftPackageReference "../../Examples" */,
+				19A5E5B82E0D84ED00F46BDE /* XCRemoteSwiftPackageReference "Tarscape" */,
+				19A5E5BB2E0D84F500F46BDE /* XCRemoteSwiftPackageReference "DataCompression" */,
+				19A5E5DC2E0EC52B00F46BDE /* XCLocalSwiftPackageReference "../../../VoicevoxCoreSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 03D3DCF42D8EE6A400B585A5 /* Products */;
@@ -202,6 +227,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -263,6 +289,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -290,6 +317,7 @@
 				CODE_SIGN_ENTITLEMENTS = SampleApp/SampleApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"SampleApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -328,6 +356,7 @@
 				CODE_SIGN_ENTITLEMENTS = SampleApp/SampleApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"SampleApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -386,12 +415,49 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../Examples;
 		};
+		19A5E5DC2E0EC52B00F46BDE /* XCLocalSwiftPackageReference "../../../VoicevoxCoreSwift" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../VoicevoxCoreSwift;
+		};
 /* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		19A5E5B82E0D84ED00F46BDE /* XCRemoteSwiftPackageReference "Tarscape" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kayembi/Tarscape.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		19A5E5BB2E0D84F500F46BDE /* XCRemoteSwiftPackageReference "DataCompression" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mw99/DataCompression.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.8.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		03D3DD382D8EE96500B585A5 /* SampleAppCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SampleAppCore;
+		};
+		19A5E5B92E0D84EE00F46BDE /* Tarscape */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 19A5E5B82E0D84ED00F46BDE /* XCRemoteSwiftPackageReference "Tarscape" */;
+			productName = Tarscape;
+		};
+		19A5E5BC2E0D84F500F46BDE /* DataCompression */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 19A5E5BB2E0D84F500F46BDE /* XCRemoteSwiftPackageReference "DataCompression" */;
+			productName = DataCompression;
+		};
+		19A5E5DD2E0EC52B00F46BDE /* VoicevoxCoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VoicevoxCoreSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
