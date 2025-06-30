@@ -177,6 +177,17 @@ public class Synthesizer {
         }
         return Data(bytes: wavPointer!, count: Int(wavLength))
     }
+    
+    public func createAudioQueryfromAccentPhrases(accentPhraseJson: String, styleId: UInt32) throws -> String {
+        var jsonPointer: UnsafeMutablePointer<CChar>?
+        let result = voicevox_audio_query_create_from_accent_phrases(
+            accentPhraseJson, &jsonPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer!)
+    }
 
     public func ttsFromKana(kana: String, styleId: UInt32, options: TtsOptions) throws -> Data {
         var wavPointer: UnsafeMutablePointer<UInt8>?
