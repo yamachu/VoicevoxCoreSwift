@@ -18,15 +18,6 @@
         "branch" : "main",
         "revision" : "ce026160f8f009275afd1cc8175a199aa3ec0072"
       }
-    },
-    {
-      "identity" : "voicevoxcoreswift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/yamachu/VoicevoxCoreSwift.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "1350769b451b691fef0215074c0067bec32c1348"
-      }
     }
   ],
   "version" : 3
