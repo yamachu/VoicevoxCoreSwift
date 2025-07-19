@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		03D3DD392D8EE96500B585A5 /* SampleAppCore in Frameworks */ = {isa = PBXBuildFile; productRef = 03D3DD382D8EE96500B585A5 /* SampleAppCore */; };
-		03D3DD3D2D8F999700B585A5 /* voicevox_core.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03D3DD3B2D8F999700B585A5 /* voicevox_core.xcframework */; };
-		03D3DD3E2D8F999700B585A5 /* voicevox_core.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03D3DD3B2D8F999700B585A5 /* voicevox_core.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		03D3DD3F2D8F999700B585A5 /* voicevox_onnxruntime.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03D3DD3C2D8F999700B585A5 /* voicevox_onnxruntime.xcframework */; };
 		03D3DD402D8F999700B585A5 /* voicevox_onnxruntime.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03D3DD3C2D8F999700B585A5 /* voicevox_onnxruntime.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -22,7 +20,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				03D3DD402D8F999700B585A5 /* voicevox_onnxruntime.xcframework in Embed Frameworks */,
-				03D3DD3E2D8F999700B585A5 /* voicevox_core.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,7 +46,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				03D3DD392D8EE96500B585A5 /* SampleAppCore in Frameworks */,
-				03D3DD3D2D8F999700B585A5 /* voicevox_core.xcframework in Frameworks */,
 				03D3DD3F2D8F999700B585A5 /* voicevox_onnxruntime.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,6 +287,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SampleApp/Preview Content\"";
+				DEVELOPMENT_TEAM = 5KWM3SSJ42;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -329,6 +326,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SampleApp/Preview Content\"";
+				DEVELOPMENT_TEAM = 5KWM3SSJ42;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
