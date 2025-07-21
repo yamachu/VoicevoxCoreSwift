@@ -178,7 +178,7 @@ public class Synthesizer {
         return Data(bytes: wavPointer!, count: Int(wavLength))
     }
     
-    public func createAudioQueryfromAccentPhrases(accentPhraseJson: String, styleId: UInt32) throws -> String {
+    public func createAudioQueryfromAccentPhrases(accentPhraseJson: String) throws -> String {
         var jsonPointer: UnsafeMutablePointer<CChar>?
         let result = voicevox_audio_query_create_from_accent_phrases(
             accentPhraseJson, &jsonPointer)
