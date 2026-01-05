@@ -15,6 +15,19 @@
  *     - `VOICEVOX_LINK_ONNXRUNTIME`: ::voicevox_onnxruntime_init_once が利用可能になる。またこのマクロが存在するなら、このライブラリはONNX Runtimeをロード時動的リンクする。
  *   </dd>
  * </dl>
+
+ * <dl>
+ *   <dt id="voicevox-core-serialization">
+ *     <a href="#voicevox-core-serialization">Serialization</a>
+ *   </dt>
+ *
+ *   <dd>
+ *     JSONの形式は[Rust APIのSerde実装]に準じており、おおむねVOICEVOX ENGINEと同じになることを目指している。ただし今後の破壊的変更にて変わる可能性がある。[データのシリアライゼーション]を参照。
+ *
+ *     [Rust APIのSerde実装]: ../rust_api/voicevox_core/__doc/Serde対応/index.html
+ *     [データのシリアライゼーション]: https://github.com/VOICEVOX/voicevox_core/blob/main/docs/guide/user/serialization.md
+ *   </dd>
+ * </dl>
  *
  * <dl>
  *   <dt id="voicevox-core-safety">
@@ -57,7 +70,7 @@
 #ifndef VOICEVOX_CORE_INCLUDE_GUARD
 #define VOICEVOX_CORE_INCLUDE_GUARD
 
-/* Generated with cbindgen:0.27.0 */
+/* Generated with cbindgen:0.28.0 */
 
 #ifdef __cplusplus
 #include <cstdint>
@@ -143,7 +156,7 @@ enum VoicevoxResultCode
    */
   VOICEVOX_RESULT_MODEL_NOT_FOUND_ERROR = 7,
   /**
-   * 推論に失敗した
+   * 推論に失敗した、もしくは推論結果が異常
    */
   VOICEVOX_RESULT_RUN_MODEL_ERROR = 8,
   /**
@@ -214,6 +227,10 @@ enum VoicevoxResultCode
    * UUIDの変換に失敗した
    */
   VOICEVOX_RESULT_INVALID_UUID_ERROR = 25,
+  /**
+   * 無効なMora
+   */
+  VOICEVOX_RESULT_INVALID_MORA_ERROR = 30,
 };
 #ifndef __cplusplus
 typedef int32_t VoicevoxResultCode;
@@ -358,7 +375,19 @@ typedef struct VoicevoxInitializeOptions {
 /**
  * 音声モデルID。
  *
+ * ::VoicevoxSynthesizer はこのIDをキーとして、音声モデルのロード・アンロードを行う。
+ *
+ * 同じIDを持つ複数のVVMファイルがあるときは、ファイルとして新しい方を常に使うことが推奨される。[VOICEVOX/voicevox_vvm]で管理されているVVMでは、次の方針が取られている。
+ *
+ * - VVMに含まれる声が変化せず、軽微な修正のみのときはIDを使い回してリリースする。
+ * - VVMに含まれる声が明確に変化するかもしくは削除されるような実質的な変更のときは、新しいIDを割り振ってリリースする。
+ *
+ * これ以外は未定であり、更なるルールについては[VOICEVOX/voicevox_vvm#19]で議論される予定。
+ *
  * \orig-impl{VoicevoxVoiceModelId}
+ *
+ * [VOICEVOX/voicevox_vvm]: https://github.com/VOICEVOX/voicevox_vvm
+ * [VOICEVOX/voicevox_vvm#19]: https://github.com/VOICEVOX/voicevox_vvm/issues/19
  */
 typedef const uint8_t (*VoicevoxVoiceModelId)[16];
 
@@ -619,7 +648,7 @@ VoicevoxResultCode voicevox_open_jtalk_rc_analyze(const struct OpenJtalkRc *open
  *
  * この関数の呼び出し後に破棄し終えた対象にアクセスすると、プロセスを異常終了する。
  *
- * @param [in] open_jtalk 破棄対象
+ * @param [in] open_jtalk 破棄対象。nullable
  *
  * \example{
  * ```c
@@ -678,6 +707,105 @@ VoicevoxResultCode voicevox_audio_query_create_from_accent_phrases(const char *a
                                                                    char **output_audio_query_json);
 
 /**
+ * JSONを`AudioQuery`型としてバリデートする。
+ *
+ * 次のうちどれかを満たすならエラーを返す。
+ *
+ * - [Rust APIの`AudioQuery`型]としてデシリアライズ不可、もしくはJSONとして不正。
+ * - `accent_phrases`の要素のうちいずれかが、 ::voicevox_accent_phrase_validate でエラーになる。
+ * - `outputSamplingRate`が`24000`の倍数ではない、もしくは`0` (将来的に解消予定。cf. [#762])。
+ *
+ * [Rust APIの`AudioQuery`型]: ../rust_api/voicevox_core/struct.AudioQuery.html
+ * [#762]: https://github.com/VOICEVOX/voicevox_core/issues/762
+ *
+ * 次の状態に対しては警告のログを出す。将来的にはエラーになる予定。
+ *
+ * - `accent_phrases`の要素のうちいずれかが警告が出る状態。
+ * - `speedScale`が負。
+ * - `volumeScale`が負。
+ * - `prePhonemeLength`が負。
+ * - `postPhonemeLength`が負。
+ * - `outputSamplingRate`が`24000`以外の値（エラーと同様将来的に解消予定）。
+ *
+ * @param [in] audio_query_json `AudioQuery`型のJSON
+ *
+ * @returns 成功時には ::VOICEVOX_RESULT_OK 、失敗時には ::VOICEVOX_RESULT_INVALID_AUDIO_QUERY_ERROR
+ *
+ * \safety{
+ * - `audio_query_json`はヌル終端文字列を指し、かつ<a href="#voicevox-core-safety">読み込みについて有効</a>でなければならない。
+ * }
+ *
+ * \orig-impl{voicevox_audio_query_validate}
+ */
+#ifdef _WIN32
+__declspec(dllimport)
+#endif
+VoicevoxResultCode voicevox_audio_query_validate(const char *audio_query_json);
+
+/**
+ * JSONを`AccentPhrase`型としてバリデートする。
+ *
+ * 次のうちどれかを満たすならエラーを返す。
+ *
+ * - [Rust APIの`AccentPhrase`型]としてデシリアライズ不可、もしくはJSONとして不正。
+ * - `moras`もしくは`pause_mora`の要素のうちいずれかが、 ::voicevox_mora_validate でエラーになる。
+ * - `accent`が`0`。
+ *
+ * [Rust APIの`AccentPhrase`型]: ../rust_api/voicevox_core/struct.AccentPhrase.html
+ *
+ * 次の状態に対しては警告のログを出す。将来的にはエラーになる予定。
+ *
+ * - `moras`もしくは`pause_mora`の要素のうちいずれかが、警告が出る状態。
+ * - `accent`が`moras`の数を超過している。
+ *
+ * @param [in] accent_phrase_json `AccentPhrase`型のJSON
+ *
+ * @returns 成功時には ::VOICEVOX_RESULT_OK 、失敗時には ::VOICEVOX_RESULT_INVALID_ACCENT_PHRASE_ERROR
+ *
+ * \safety{
+ * - `accent_phrase_json`はヌル終端文字列を指し、かつ<a href="#voicevox-core-safety">読み込みについて有効</a>でなければならない。
+ * }
+ *
+ * \orig-impl{voicevox_accent_phrase_validate}
+ */
+#ifdef _WIN32
+__declspec(dllimport)
+#endif
+VoicevoxResultCode voicevox_accent_phrase_validate(const char *accent_phrase_json);
+
+/**
+ * JSONを`Mora`型としてバリデートする。
+ *
+ * 次のうちどれかを満たすならエラーを返す。
+ *
+ * - [Rust APIの`Mora`型]としてデシリアライズ不可、もしくはJSONとして不正。
+ * - `consonant`と`consonant_length`の有無が不一致。
+ * - `consonant`が子音以外の音素であるか、もしくは音素として不正。
+ * - `vowel`が子音であるか、もしくは音素として不正。
+ *
+ * [Rust APIの`Mora`型]: ../rust_api/voicevox_core/struct.Mora.html
+ *
+ * 次の状態に対しては警告のログを出す。将来的にはエラーになる予定。
+ *
+ * - `consonant_length`が負。
+ * - `vowel_length`が負。
+ *
+ * @param [in] mora_json `Mora`型のJSON
+ *
+ * @returns 成功時には ::VOICEVOX_RESULT_OK 、失敗時には ::VOICEVOX_RESULT_INVALID_MORA_ERROR
+ *
+ * \safety{
+ * - `mora_json`はヌル終端文字列を指し、かつ<a href="#voicevox-core-safety">読み込みについて有効</a>でなければならない。
+ * }
+ *
+ * \orig-impl{voicevox_mora_validate}
+ */
+#ifdef _WIN32
+__declspec(dllimport)
+#endif
+VoicevoxResultCode voicevox_mora_validate(const char *mora_json);
+
+/**
  * VVMファイルを開く。
  *
  * @param [in] path vvmファイルへのUTF-8のファイルパス
@@ -702,7 +830,7 @@ VoicevoxResultCode voicevox_voice_model_file_open(const char *path,
  * ::VoicevoxVoiceModelFile からIDを取得する。
  *
  * @param [in] model 音声モデル
- * @param [out] output_voice_model_id 音声モデルID
+ * @param [out] output_voice_model_id 音声モデルID。詳細は ::VoicevoxVoiceModelId
  *
  * \safety{
  * - `output_voice_model_id`は<a href="#voicevox-core-safety">書き込みについて有効</a>でなければならない。
@@ -739,7 +867,7 @@ char *voicevox_voice_model_file_create_metas_json(const struct VoicevoxVoiceMode
  *
  * この関数の呼び出し後に破棄し終えた対象にアクセスすると、プロセスを異常終了する。
  *
- * @param [in] model 破棄対象
+ * @param [in] model 破棄対象。nullable
  *
  * \no-orig-impl{voicevox_voice_model_file_delete}
  */
@@ -780,7 +908,7 @@ VoicevoxResultCode voicevox_synthesizer_new(const struct VoicevoxOnnxruntime *on
  *
  * この関数の呼び出し後に破棄し終えた対象にアクセスすると、プロセスを異常終了する。
  *
- * @param [in] synthesizer 破棄対象
+ * @param [in] synthesizer 破棄対象。nullable
  *
  * \no-orig-impl{voicevox_synthesizer_delete}
  */
@@ -1288,10 +1416,10 @@ VoicevoxResultCode voicevox_synthesizer_tts(const struct VoicevoxSynthesizer *sy
 /**
  * JSON文字列を解放する。
  *
- * @param [in] json 解放するJSON文字列
+ * @param [in] json 解放するJSON文字列。nullable
  *
  * \safety{
- * - `json`は以下のAPIで得られたポインタでなくてはいけない。
+ * - `json`がヌルポインタでないならば、以下のAPIで得られたポインタでなくてはいけない。
  *     - ::voicevox_audio_query_create_from_accent_phrases
  *     - ::voicevox_onnxruntime_create_supported_devices_json
  *     - ::voicevox_voice_model_file_create_metas_json
@@ -1304,8 +1432,8 @@ VoicevoxResultCode voicevox_synthesizer_tts(const struct VoicevoxSynthesizer *sy
  *     - ::voicevox_synthesizer_replace_mora_pitch
  *     - ::voicevox_user_dict_to_json
  * - 文字列の長さは生成時より変更されていてはならない。
- * - `json`は<a href="#voicevox-core-safety">読み込みと書き込みについて有効</a>でなければならない。
- * - `json`は以後<b>ダングリングポインタ</b>(_dangling pointer_)として扱われなくてはならない。
+ * - `json`がヌルポインタでないならば、<a href="#voicevox-core-safety">読み込みと書き込みについて有効</a>でなければならない。
+ * - `json`がヌルポインタでないならば、以後<b>ダングリングポインタ</b>(_dangling pointer_)として扱われなくてはならない。
  * }
  *
  * \no-orig-impl{voicevox_json_free}
@@ -1318,14 +1446,14 @@ void voicevox_json_free(char *json);
 /**
  * WAVデータを解放する。
  *
- * @param [in] wav 解放するWAVデータ
+ * @param [in] wav 解放するWAVデータ。nullable
  *
  * \safety{
- * - `wav`は以下のAPIで得られたポインタでなくてはいけない。
+ * - `wav`がヌルポインタでないならば、以下のAPIで得られたポインタでなくてはいけない。
  *     - ::voicevox_synthesizer_synthesis
  *     - ::voicevox_synthesizer_tts
- * - `wav`は<a href="#voicevox-core-safety">読み込みと書き込みについて有効</a>でなければならない。
- * - `wav`は以後<b>ダングリングポインタ</b>(_dangling pointer_)として扱われなくてはならない。
+ * - `wav`がヌルポインタでないならば、<a href="#voicevox-core-safety">読み込みと書き込みについて有効</a>でなければならない。
+ * - `wav`がヌルポインタでないならば、以後<b>ダングリングポインタ</b>(_dangling pointer_)として扱われなくてはならない。
  * }
  *
  * \no-orig-impl{voicevox_wav_free}
@@ -1539,7 +1667,7 @@ VoicevoxResultCode voicevox_user_dict_save(const struct VoicevoxUserDict *user_d
  *
  * この関数の呼び出し後に破棄し終えた対象にアクセスすると、プロセスを異常終了する。
  *
- * @param [in] user_dict 破棄対象
+ * @param [in] user_dict 破棄対象。nullable
  *
  * \no-orig-impl{voicevox_user_dict_delete}
  */
