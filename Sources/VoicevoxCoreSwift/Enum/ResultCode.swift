@@ -36,7 +36,7 @@ public enum ResultCode: Int32, Error {
      */
     case MODEL_NOT_FOUND_ERROR = 7
     /**
-     * 推論に失敗した
+     * 推論に失敗した、もしくは推論結果が異常
      */
     case RUN_MODEL_ERROR = 8
     /**
@@ -107,6 +107,10 @@ public enum ResultCode: Int32, Error {
      * UUIDの変換に失敗した
      */
     case INVALID_UUID_ERROR = 25
+    /**
+     * 無効なMora
+     */
+    case INVALID_MORA_ERROR = 30
 }
 
 extension ResultCode: CustomStringConvertible {
