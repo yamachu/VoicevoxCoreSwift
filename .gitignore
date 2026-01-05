@@ -9,3 +9,5 @@ DerivedData/
 
 Examples/native/*
 !Examples/native/.gitkeep
+
+tmp/*
