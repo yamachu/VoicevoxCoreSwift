@@ -39,4 +39,25 @@ public struct VoicevoxCoreUtil {
 
         return audioQuery
     }
+
+    public static func validateAudioQuery(audioQueryJson: String) throws {
+        let result = voicevox_audio_query_validate(audioQueryJson)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+    }
+
+    public static func validateAccentPhrase(accentPhraseJson: String) throws {
+        let result = voicevox_accent_phrase_validate(accentPhraseJson)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+    }
+
+    public static func validateMora(moraJson: String) throws {
+        let result = voicevox_mora_validate(moraJson)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+    }
 }
