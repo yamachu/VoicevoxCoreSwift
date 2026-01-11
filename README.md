@@ -22,9 +22,11 @@ binaryTargetに依存していないため、ヘッダに変更がない限り�
 .package(url: "https://github.com/yamachu/VoicevoxCoreSwift.git", branch: "main") // or use a specific version
 ```
 
+voicevox_core のどのバージョンに対応しているかは、[VERSIONS.md](./VERSIONS.md) を参照してください。
+
 ## Features
 
-- [voicevox_core 0.16.0](https://github.com/VOICEVOX/voicevox_core/releases/tag/0.16.0) で提供されるAPIをラップ
+- [voicevox_core 0.16.x](https://github.com/VOICEVOX/voicevox_core/releases) で提供されるAPIをラップ
 
 ### Future work
 
