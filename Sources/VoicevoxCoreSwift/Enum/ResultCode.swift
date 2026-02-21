@@ -111,6 +111,26 @@ public enum ResultCode: Int32, Error {
      * 無効なMora
      */
     case INVALID_MORA_ERROR = 30
+    /**
+     * 無効な楽譜
+     */
+    case INVALID_SCORE_ERROR = 31
+    /**
+     * 無効なノート
+     */
+    case INVALID_NOTE_ERROR = 32
+    /**
+     * 無効なFrameAudioQuery
+     */
+    case INVALID_FRAME_AUDIO_QUERY_ERROR = 33
+    /**
+     * 無効なFramePhoneme
+     */
+    case INVALID_FRAME_PHONEME_ERROR = 34
+    /**
+     * 楽譜とFrameAudioQueryの組み合わせが不正
+     */
+    case INCOMPATIBLE_QUERIES_ERROR = 35
 }
 
 extension ResultCode: CustomStringConvertible {
