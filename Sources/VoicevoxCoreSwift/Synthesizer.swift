@@ -194,6 +194,59 @@ public class Synthesizer {
         return Data(bytes: wavPointer!, count: Int(wavLength))
     }
 
+    public func createSingFrameAudioQuery(scoreJson: String, styleId: UInt32) throws -> String {
+        var jsonPointer: UnsafeMutablePointer<CChar>?
+        let result = voicevox_synthesizer_create_sing_frame_audio_query(
+            self.pointer, scoreJson, styleId, &jsonPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer!)
+    }
+
+    public func createSingFrameF0(scoreJson: String, frameAudioQueryJson: String, styleId: UInt32)
+        throws -> String
+    {
+        var jsonPointer: UnsafeMutablePointer<CChar>?
+        let result = voicevox_synthesizer_create_sing_frame_f0(
+            self.pointer, scoreJson, frameAudioQueryJson, styleId, &jsonPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer!)
+    }
+
+    public func createSingFrameVolume(
+        scoreJson: String, frameAudioQueryJson: String, styleId: UInt32
+    ) throws -> String {
+        var jsonPointer: UnsafeMutablePointer<CChar>?
+        let result = voicevox_synthesizer_create_sing_frame_volume(
+            self.pointer, scoreJson, frameAudioQueryJson, styleId, &jsonPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer { voicevox_json_free(jsonPointer) }
+        return String(cString: jsonPointer!)
+    }
+
+    public func frameSynthesis(frameAudioQueryJson: String, styleId: UInt32) throws -> Data {
+        var wavPointer: UnsafeMutablePointer<UInt8>?
+        var wavLength: UInt = 0
+        let result = voicevox_synthesizer_frame_synthesis(
+            self.pointer, frameAudioQueryJson, styleId, &wavLength, &wavPointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        defer {
+            if let wavPointer = wavPointer {
+                voicevox_wav_free(wavPointer)
+            }
+        }
+        return Data(bytes: wavPointer!, count: Int(wavLength))
+    }
+
     deinit {
         if pointer != nil {
             voicevox_synthesizer_delete(pointer)

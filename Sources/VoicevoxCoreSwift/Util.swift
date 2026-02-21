@@ -60,4 +60,39 @@ public struct VoicevoxCoreUtil {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
     }
+
+    public static func validateScore(scoreJson: String) throws {
+        let result = voicevox_score_validate(scoreJson)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+    }
+
+    public static func validateNote(noteJson: String) throws {
+        let result = voicevox_note_validate(noteJson)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+    }
+
+    public static func validateFrameAudioQuery(frameAudioQueryJson: String) throws {
+        let result = voicevox_frame_audio_query_validate(frameAudioQueryJson)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+    }
+
+    public static func validateFramePhoneme(framePhonemeJson: String) throws {
+        let result = voicevox_frame_phoneme_validate(framePhonemeJson)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+    }
+
+    public static func EnsureCompatible(scoreJson: String, frameAudioQueryJson: String) throws {
+        let result = voicevox_ensure_compatible(scoreJson, frameAudioQueryJson)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+    }
 }
