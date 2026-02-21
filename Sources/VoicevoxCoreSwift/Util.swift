@@ -89,7 +89,7 @@ public struct VoicevoxCoreUtil {
         }
     }
 
-    public static func EnsureCompatible(scoreJson: String, frameAudioQueryJson: String) throws {
+    public static func ensureCompatible(scoreJson: String, frameAudioQueryJson: String) throws {
         let result = voicevox_ensure_compatible(scoreJson, frameAudioQueryJson)
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
