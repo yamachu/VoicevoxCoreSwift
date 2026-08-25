@@ -25,8 +25,11 @@ public class Synthesizer {
         return Synthesizer(pointer: pointer)
     }
 
-    public func loadVoiceModel(model: VoiceModel) throws {
-        let result = voicevox_synthesizer_load_voice_model(self.pointer, model.pointer)
+    public func loadVoiceModel(
+        model: VoiceModel, options: LoadVoiceModelOptions = .defaultOptions()
+    ) throws {
+        let result = voicevox_synthesizer_load_voice_model(
+            self.pointer, model.pointer, options.options)
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
