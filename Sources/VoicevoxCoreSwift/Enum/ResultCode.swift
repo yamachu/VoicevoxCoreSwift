@@ -70,7 +70,7 @@ public enum ResultCode: Int32, Error {
     /**
      * モデルの形式が不正
      */
-    case INVALID_MODEL_HEADER_ERROR = 28
+    case INVALID_MODEL_FORMAT_ERROR = 28
     /**
      * すでに読み込まれている音声モデルを読み込もうとした
      */
@@ -136,5 +136,12 @@ public enum ResultCode: Int32, Error {
 extension ResultCode: CustomStringConvertible {
     public var description: String {
         return String(cString: voicevox_error_result_to_message(self.rawValue))
+    }
+}
+
+extension ResultCode {
+    @available(*, deprecated, renamed: "INVALID_MODEL_FORMAT_ERROR")
+    public static var INVALID_MODEL_HEADER_ERROR: Self {
+        .INVALID_MODEL_FORMAT_ERROR
     }
 }

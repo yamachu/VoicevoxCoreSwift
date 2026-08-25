@@ -46,12 +46,30 @@ public class Onnxruntime {
             return Onnxruntime(pointer: pointer)
         }
 
-        public static var VersionedFilename: String {
-            return String(cString: voicevox_get_onnxruntime_lib_versioned_filename())
+        public static var MinRequiredMinorVersion: UInt32 {
+            voicevox_get_onnxruntime_lib_min_required_minor_version()
         }
 
+        public static var MaxSupportedMinorVersion: UInt32 {
+            voicevox_get_onnxruntime_lib_max_supported_minor_version()
+        }
+
+        public static var RecommendedVersionedFilename: String {
+            String(cString: voicevox_get_onnxruntime_lib_recommended_versioned_filename())
+        }
+
+        public static var RecommendedUnversionedFilename: String {
+            String(cString: voicevox_get_onnxruntime_lib_recommended_unversioned_filename())
+        }
+
+        @available(*, deprecated, renamed: "RecommendedVersionedFilename")
+        public static var VersionedFilename: String {
+            RecommendedVersionedFilename
+        }
+
+        @available(*, deprecated, renamed: "RecommendedUnversionedFilename")
         public static var UnversionedFilename: String {
-            return String(cString: voicevox_get_onnxruntime_lib_unversioned_filename())
+            RecommendedUnversionedFilename
         }
     }
 #elseif os(iOS)

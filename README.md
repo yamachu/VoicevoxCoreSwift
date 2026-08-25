@@ -26,7 +26,7 @@ voicevox_core のどのバージョンに対応しているかは、[VERSIONS.md
 
 ## Features
 
-- [voicevox_core 0.16.x](https://github.com/VOICEVOX/voicevox_core/releases) で提供されるAPIをラップ
+- [voicevox_core 0.16.x-0.17.x](https://github.com/VOICEVOX/voicevox_core/releases) で提供されるAPIをラップ
 
 ### Future work
 

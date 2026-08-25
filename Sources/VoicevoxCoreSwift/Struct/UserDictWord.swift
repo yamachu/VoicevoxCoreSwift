@@ -60,12 +60,12 @@ public class UserDictWord {
         }
     }
 
-    public var priority: UInt {
+    public var priority: UInt8 {
         get {
-            return UInt(word.priority)
+            return word.priority
         }
         set {
-            word.priority = UInt32(newValue)
+            word.priority = newValue
         }
     }
 
