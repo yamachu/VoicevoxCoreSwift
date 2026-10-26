@@ -131,6 +131,18 @@ public enum ResultCode: Int32, Error {
      * 楽譜とFrameAudioQueryの組み合わせが不正
      */
     case INCOMPATIBLE_QUERIES_ERROR = 35
+    /**
+     * AudioFeatureSliceをスライスするときの始端が大きすぎた
+     */
+    case START_OUT_OF_BOUNDS_ERROR = 36
+    /**
+     * AudioFeatureSliceをスライスするときの終端が大きすぎた
+     */
+    case END_OUT_OF_BOUNDS_ERROR = 37
+    /**
+     * AudioFeatureSliceをスライスするときに始端が終端を超えていた
+     */
+    case START_EXCEEDS_END_ERROR = 38
 }
 
 extension ResultCode: CustomStringConvertible {
