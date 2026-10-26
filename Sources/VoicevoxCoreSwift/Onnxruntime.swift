@@ -29,7 +29,7 @@ public class Onnxruntime {
             throw ResultCodeError.from(.init(rawValue: result)!)
         }
         defer {
-            voicevox_json_free(outputJson)
+            voicevox_string_free(outputJson)
         }
         return String(cString: outputJson!)
     }

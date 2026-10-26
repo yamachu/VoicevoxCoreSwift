@@ -8,4 +8,8 @@ public struct VoicevoxCore {
     public static var version: String {
         return String(cString: voicevox_get_version())
     }
+
+    public static var frameRate: Double {
+        return voicevox_get_frame_rate()
+    }
 }

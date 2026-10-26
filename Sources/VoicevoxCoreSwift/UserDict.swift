@@ -73,7 +73,7 @@ public class UserDict {
 
         defer {
             if let jsonPointer = jsonPointer {
-                voicevox_json_free(jsonPointer)
+                voicevox_string_free(jsonPointer)
             }
         }
 

@@ -2,4 +2,6 @@
 # Scripts/check_header_sync.py がこのファイルを読み、ここに無い未ラップの関数を
 # 検出したら失敗する。上流のバージョンを上げて新しい API が増えたときに気づくため。
 #
-# 現時点では未ラップの関数は無い。
+# 非推奨の別名。Swift の解放処理は推奨される API を使用する。
+voicevox_json_free # voicevox_string_free に移行
+voicevox_wav_free # voicevox_bytes_free に移行

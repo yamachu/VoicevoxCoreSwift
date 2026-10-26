@@ -45,7 +45,7 @@ public class VoiceModel {
         guard let jsonPointer = voicevox_voice_model_file_create_metas_json(pointer) else {
             return ""
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer)
     }
 
