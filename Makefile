@@ -1,5 +1,11 @@
 all: Sources/VoicevoxCoreSwiftIOS/include/voicevox_core.h Sources/VoicevoxCoreSwiftMAC/include/voicevox_core.h
 
+# 取り込んだヘッダと Swift 側の定義が同期しているかを検査する
+check:
+	@python3 Scripts/check_header_sync.py
+
+.PHONY: all check FORCE
+
 tmp:
 	@mkdir -p $@
 

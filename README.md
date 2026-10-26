@@ -33,6 +33,20 @@ voicevox_core のどのバージョンに対応しているかは、[VERSIONS.md
 - AccentPhrasesなどのjson形式で渡されるものを型で表現する
   - ref: https://github.com/VOICEVOX/voicevox_core/issues/975
 
+## Development
+
+### ヘッダ同期チェック
+
+```sh
+make check
+```
+
+取り込んだ `voicevox_core.h` と Swift 側の定義がずれていないかを検査します。
+
+- `ResultCode` などの enum が、ヘッダの値と一致しているか（`ResultCode(rawValue:)!` などの force unwrap がクラッシュするため）
+- ヘッダの API がすべて Swift からラップされているか（意図的にラップしないものは [Scripts/unwrapped_apis.txt](./Scripts/unwrapped_apis.txt) に記載）
+- iOS/macOS 双方のヘッダが同一の上流バージョンから取得されているか
+
 ## License
 
 MIT License

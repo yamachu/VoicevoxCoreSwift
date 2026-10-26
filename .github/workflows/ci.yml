@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Header sync check
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # 取り込んだ voicevox_core.h と Swift 側の enum / ラッパーのずれを検出する。
+      # このリポジトリはヘッダのみを提供しテストバイナリをリンクできないため、
+      # 実行時テストの代わりにこの静的な突き合わせを回す。
+      - run: make check
+
+  build:
+    name: Build (${{ matrix.platform }})
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macOS, iOS]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - if: matrix.platform == 'macOS'
+        run: swift build
+      # LoadOnnxruntimeOptions などが #if os(macOS) で囲われているため、
+      # iOS 側は別途ビルドしないと片方だけ壊れたことに気づけない
+      - if: matrix.platform == 'iOS'
+        run: |
+          swift build \
+            --sdk "$(xcrun --sdk iphoneos --show-sdk-path)" \
+            --triple arm64-apple-ios15.0
