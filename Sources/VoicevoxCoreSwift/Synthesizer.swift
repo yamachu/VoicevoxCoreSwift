@@ -250,6 +250,47 @@ public class Synthesizer {
         return Data(bytes: wavPointer!, count: Int(wavLength))
     }
 
+    public func createAudioFeature(
+        audioQueryJson: String, styleId: UInt32, options: SynthesisOptions = .defaultOptions()
+    ) throws -> AudioFeature {
+        var audioFeaturePointer: OpaquePointer?
+        let result = voicevox_synthesizer_create_audio_feature(
+            self.pointer, audioQueryJson, styleId, options.options, &audioFeaturePointer)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        guard let audioFeaturePointer = audioFeaturePointer else {
+            throw NSError(
+                domain: "Synthesizer", code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "Failed to create audio feature"])
+        }
+        return AudioFeature(pointer: audioFeaturePointer)
+    }
+
+    /// Returns signed 16-bit little-endian PCM, not a WAV container.
+    public func render(audioFeatureSlice: AudioFeatureSlice) throws -> Data {
+        return try withExtendedLifetime(audioFeatureSlice) {
+            var pcmPointer: UnsafeMutablePointer<UInt8>?
+            var pcmLength: UInt = 0
+            let result = voicevox_synthesizer_render(
+                self.pointer, audioFeatureSlice.value, &pcmLength, &pcmPointer)
+            if result != ResultCode.OK.rawValue {
+                throw ResultCodeError.from(ResultCode(rawValue: result)!)
+            }
+            // Empty PCM uses a static sentinel that must not be freed.
+            guard pcmLength > 0 else {
+                return Data()
+            }
+            defer { voicevox_bytes_free(pcmPointer) }
+            guard let pcmPointer = pcmPointer else {
+                throw NSError(
+                    domain: "Synthesizer", code: -1,
+                    userInfo: [NSLocalizedDescriptionKey: "Failed to render audio feature"])
+            }
+            return Data(bytes: pcmPointer, count: Int(pcmLength))
+        }
+    }
+
     deinit {
         if pointer != nil {
             voicevox_synthesizer_delete(pointer)

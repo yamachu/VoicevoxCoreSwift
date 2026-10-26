@@ -40,6 +40,35 @@ public struct VoicevoxCoreUtil {
         return audioQuery
     }
 
+    public static func audioQueryFrameLength(
+        audioQueryJson: String, options: AudioQueryFrameLengthOptions = .defaultOptions()
+    ) throws -> UInt {
+        var frameLength: UInt = 0
+        let result = voicevox_audio_query_frame_length(
+            audioQueryJson, options.options, &frameLength)
+        if result != ResultCode.OK.rawValue {
+            throw ResultCodeError.from(ResultCode(rawValue: result)!)
+        }
+        return frameLength
+    }
+
+    public static func wavFromS16le(pcm: Data, samplingRate: UInt32, isStereo: Bool) -> Data {
+        var wavPointer: UnsafeMutablePointer<UInt8>?
+        var wavLength: UInt = 0
+        var emptyByte: UInt8 = 0
+        // Even empty PCM requires a non-null pointer.
+        withUnsafePointer(to: &emptyByte) { emptyPointer in
+            pcm.withUnsafeBytes { buffer in
+                voicevox_wav_from_s16le(
+                    UInt(buffer.count),
+                    buffer.bindMemory(to: UInt8.self).baseAddress ?? emptyPointer,
+                    samplingRate, isStereo, &wavLength, &wavPointer)
+            }
+        }
+        defer { voicevox_bytes_free(wavPointer) }
+        return Data(bytes: wavPointer!, count: Int(wavLength))
+    }
+
     public static func validateAudioQuery(audioQueryJson: String) throws {
         let result = voicevox_audio_query_validate(audioQueryJson)
         if result != ResultCode.OK.rawValue {
