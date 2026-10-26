@@ -99,7 +99,8 @@ struct SpeechSynthesisView: View {
 
         // 5. TTSの実行
         var ttsOptions = TtsOptions.defaultOptions()
-        let data = try? synthesizer.tts(text: text, styleId: UInt32(styleId), options: ttsOptions)
+        let data = try? synthesizer.tts(
+            text: text, styleId: StyleId(rawValue: UInt32(styleId)), options: ttsOptions)
         guard let wavData = data else {
             print("Failed to synthesize speech")
             return
