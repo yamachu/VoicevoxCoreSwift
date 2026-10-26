@@ -13,7 +13,7 @@ public struct VoicevoxCoreUtil {
         var resultPointer: UnsafeMutablePointer<CChar>?
         defer {
             if let resultPointer = resultPointer {
-                voicevox_json_free(resultPointer)
+                voicevox_string_free(resultPointer)
             }
         }
 

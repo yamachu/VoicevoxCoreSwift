@@ -55,7 +55,7 @@ public class Synthesizer {
 
         defer {
             if let wavPointer = wavPointer {
-                voicevox_wav_free(wavPointer)
+                voicevox_bytes_free(wavPointer)
             }
         }
 
@@ -82,7 +82,7 @@ public class Synthesizer {
         guard let jsonPointer = voicevox_synthesizer_create_metas_json(self.pointer) else {
             throw ResultCodeError.from(.INVALID_MODEL_DATA_ERROR)
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer)
     }
 
@@ -93,7 +93,7 @@ public class Synthesizer {
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer!)
     }
 
@@ -104,7 +104,7 @@ public class Synthesizer {
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer!)
     }
 
@@ -115,7 +115,7 @@ public class Synthesizer {
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer!)
     }
 
@@ -126,7 +126,7 @@ public class Synthesizer {
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer!)
     }
 
@@ -137,7 +137,7 @@ public class Synthesizer {
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer!)
     }
 
@@ -148,7 +148,7 @@ public class Synthesizer {
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer!)
     }
 
@@ -159,7 +159,7 @@ public class Synthesizer {
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer!)
     }
 
@@ -175,7 +175,7 @@ public class Synthesizer {
         }
         defer {
             if let wavPointer = wavPointer {
-                voicevox_wav_free(wavPointer)
+                voicevox_bytes_free(wavPointer)
             }
         }
         return Data(bytes: wavPointer!, count: Int(wavLength))
@@ -191,7 +191,7 @@ public class Synthesizer {
         }
         defer {
             if let wavPointer = wavPointer {
-                voicevox_wav_free(wavPointer)
+                voicevox_bytes_free(wavPointer)
             }
         }
         return Data(bytes: wavPointer!, count: Int(wavLength))
@@ -204,7 +204,7 @@ public class Synthesizer {
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer!)
     }
 
@@ -217,7 +217,7 @@ public class Synthesizer {
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer!)
     }
 
@@ -230,7 +230,7 @@ public class Synthesizer {
         if result != ResultCode.OK.rawValue {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
-        defer { voicevox_json_free(jsonPointer) }
+        defer { voicevox_string_free(jsonPointer) }
         return String(cString: jsonPointer!)
     }
 
@@ -244,7 +244,7 @@ public class Synthesizer {
         }
         defer {
             if let wavPointer = wavPointer {
-                voicevox_wav_free(wavPointer)
+                voicevox_bytes_free(wavPointer)
             }
         }
         return Data(bytes: wavPointer!, count: Int(wavLength))

@@ -36,7 +36,7 @@ public class OpenJtalkRc {
             throw ResultCodeError.from(ResultCode(rawValue: result)!)
         }
         defer {
-            voicevox_json_free(outputJson)
+            voicevox_string_free(outputJson)
         }
         return String(cString: outputJson!)
     }
