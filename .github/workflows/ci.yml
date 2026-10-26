@@ -33,5 +33,5 @@ jobs:
       - if: matrix.platform == 'iOS'
         run: |
           swift build \
-            -Xswiftc -sdk -Xswiftc "$(xcrun --sdk iphoneos --show-sdk-path)" \
-            -Xswiftc -target -Xswiftc arm64-apple-ios15.0
+            --sdk "$(xcrun --sdk iphoneos --show-sdk-path)" \
+            --triple arm64-apple-ios15.0
